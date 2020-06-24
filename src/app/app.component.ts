@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -33,17 +33,23 @@ export class AppComponent {
   rFrDig: number;
   rvalue: string;
 
+  constructor(private ref: ChangeDetectorRef) {
+  }
+
   eChange(event: string): void{
     this.evalue = event;
+    this.ref.detectChanges();
   }
 
 
   dChange(event: string): void{
     this.dvalue = event;
+    this.ref.detectChanges();
   }
 
 
   rChange(event: string): void{
     this.dvalue = event;
+    this.ref.detectChanges();
   }
 }

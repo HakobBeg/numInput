@@ -47,15 +47,26 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
 
-
     for (let key in changes) {
       if (key === 'milliSeconds' || key === 'readonly' || key === 'disabled') {
         continue;
       }
       if (key === 'value') {
         this.model.currentValue = (changes[key].currentValue) ? changes[key].currentValue : '';
-        if(this.inputElement) {
+        this.validator.validate();
 
+        if (!this.readonly) {
+
+          if (this.model.valid) {
+            this.formatter.format();
+            this.onInputChange();
+            this.valueChange.emit(this.model.currentValue);
+          }
+
+        } else {
+          if (this.model.valid) {
+            this.formatter.format();
+          }
         }
         continue;
       }
@@ -87,7 +98,7 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
     this.inputEvent$.pipe(
       filter((event) => {
 
-        if (event.key === 'Backspace' ) {
+        if (event.key === 'Backspace') {
           this.onInputChange();
           return true;
         }
