@@ -1,0 +1,13 @@
+.content{
+  display: flex;
+  flex-direction: column;
+  align-content: space-between;
+  align-items: center;
+
+}
+
+.Conditions{
+    width: 80%;
+  margin-left: 20%;
+  margin-right: 20%;
+}
