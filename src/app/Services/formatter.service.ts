@@ -47,8 +47,6 @@ export class FormatterService {
   }
 
 
-
-
   format(): void {
     this.removeExcessiveZeroes();
     this.setZero();

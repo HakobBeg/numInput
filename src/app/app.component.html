@@ -2,41 +2,47 @@
 <br>
 <br>
 <div class="Conditions">
-  <input [(ngModel)]="eMin"  placeholder="Min"/>
-  <input [(ngModel)]="eMax"  placeholder="Max"/>
-  <input [(ngModel)]="eMs"  placeholder="Milliseconds"/>
-  <input [(ngModel)]="eFrDig"  placeholder="Fraction Digits"/>
-  <input [(ngModel)]="eDecSep"  placeholder="Decimal Separator"/>
-  <input [(ngModel)]="eGrSep"  placeholder="Group Separator"/>
-  <input [(ngModel)]="evalue"  placeholder="Value"/>
+  <label> <input [(ngModel)]="eMin" placeholder="Min"/></label>
+  <label> <input [(ngModel)]="eMax" placeholder="Max"/></label>
+  <label> <input [(ngModel)]="eMs" placeholder="Milliseconds"/></label>
+  <label> <input [(ngModel)]="eFrDig" placeholder="Fraction Digits"/></label>
+  <label> <input [(ngModel)]="eDecSep" placeholder="Decimal Separator"/></label>
+  <label> <input [(ngModel)]="eGrSep" placeholder="Group Separator"/></label>
+  <label> <input [(ngModel)]="evalue" placeholder="Value"/></label>
 </div>
 <br>
 <div class="content">
-  <app-number-input   [value]="evalue" (valueChange)="eChange($event)"  [min]="eMin" [max]="eMax"  [milliSeconds]="eMs" [fractionDigits]="eFrDig" [decimalSeparator]="eDecSep" [groupSeparator]="eGrSep"  class="editable"></app-number-input>
+  <app-number-input [value]="evalue" (valueChange)="eChange($event)" [min]="eMin" [max]="eMax" [milliSeconds]="eMs"
+                    [fractionDigits]="eFrDig" [decimalSeparator]="eDecSep" [groupSeparator]="eGrSep"
+                    class="editable"></app-number-input>
   <br>
   <br>
   <div>
-    <input [(ngModel)]="dMin"  placeholder="Min"/>
-    <input [(ngModel)]="dMax"  placeholder="Max"/>
-    <input [(ngModel)]="dMs"  placeholder="Milliseconds"/>
-    <input [(ngModel)]="dFrDig"  placeholder="Fraction Digits"/>
-    <input [(ngModel)]="dDecSep"  placeholder="Decimal Separator"/>
-    <input [(ngModel)]="dGrSep"  placeholder="Group Separator"/>
-    <input [(ngModel)]="dvalue"  placeholder="Value"/>
+    <label> <input [(ngModel)]="dMin" placeholder="Min"/></label>
+    <label> <input [(ngModel)]="dMax" placeholder="Max"/></label>
+    <label> <input [(ngModel)]="dMs" placeholder="Milliseconds"/></label>
+    <label> <input [(ngModel)]="dFrDig" placeholder="Fraction Digits"/></label>
+    <label> <input [(ngModel)]="dDecSep" placeholder="Decimal Separator"/></label>
+    <label> <input [(ngModel)]="dGrSep" placeholder="Group Separator"/></label>
+    <label> <input [(ngModel)]="dvalue" placeholder="Value"/></label>
   </div>
   <br>
-  <app-number-input [value]="dvalue" (valueChange)="dChange($event)"  [min]="dMin" [max]="dMax"  [milliSeconds]="dMs" [fractionDigits]="dFrDig" [decimalSeparator]="dDecSep" [groupSeparator]="dGrSep" [disabled]="true" class="diabled"></app-number-input>
+  <app-number-input [value]="dvalue" (valueChange)="dChange($event)" [min]="dMin" [max]="dMax" [milliSeconds]="dMs"
+                    [fractionDigits]="dFrDig" [decimalSeparator]="dDecSep" [groupSeparator]="dGrSep" [disabled]="true"
+                    class="diabled"></app-number-input>
   <br>
   <br>
   <div>
-    <input [(ngModel)]="rMin"  placeholder="Min"/>
-    <input [(ngModel)]="rMax"  placeholder="Max"/>
-    <input [(ngModel)]="rMs"  placeholder="Milliseconds"/>
-    <input [(ngModel)]="rFrDig"  placeholder="Fraction Digits"/>
-    <input [(ngModel)]="rDecSep"  placeholder="Decimal Separator"/>
-    <input [(ngModel)]="rGrSep"  placeholder="Group Separator"/>
-    <input [(ngModel)]="rvalue"  placeholder="Value"/>
+    <label><input [(ngModel)]="rMin" placeholder="Min"/> </label>
+    <label><input [(ngModel)]="rMax" placeholder="Max"/> </label>
+    <label><input [(ngModel)]="rMs" placeholder="Milliseconds"/> </label>
+    <label><input [(ngModel)]="rFrDig" placeholder="Fraction Digits"/> </label>
+    <label><input [(ngModel)]="rDecSep" placeholder="Decimal Separator"/> </label>
+    <label><input [(ngModel)]="rGrSep" placeholder="Group Separator"/> </label>
+    <label><input [(ngModel)]="rvalue" placeholder="Value"/> </label>
   </div>
   <br>
-  <app-number-input [value]="rvalue" (valueChange)="rChange($event)"  [min]="rMin" [max]="rMax"  [milliSeconds]="rMs" [fractionDigits]="rFrDig" [decimalSeparator]="rDecSep" [groupSeparator]="rGrSep" class="readonly" [readonly]="  true" ></app-number-input>
+  <app-number-input [value]="rvalue" (valueChange)="rChange($event)" [min]="rMin" [max]="rMax" [milliSeconds]="rMs"
+                    [fractionDigits]="rFrDig" [decimalSeparator]="rDecSep" [groupSeparator]="rGrSep" class="readonly"
+                    [readonly]="  true"></app-number-input>
 </div>

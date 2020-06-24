@@ -5,7 +5,7 @@
           id="basic-addon1">{{(!readonly && !disabled) ? 'Editable Mode' : ''}} {{(!readonly && disabled) ? 'Disabled Mode' : ''}} {{(readonly) ? 'Readonly Mode' : ''}}</span>
     <input #input (keypress)="onInputChange()" [ngClass]="(model.valid)?'':'form-control is-invalid'"
            [(ngModel)]="model.currentValue" *ngIf="!readonly; else readonlyMode" [disabled]="disabled" type="text"
-           class="form-control" [placeholder]="(disabled)?'Input is disabled':'Type number'">
+           class="form-control" [placeholder]="(disabled)?'Input is disabled':'Type number'"/>
     <br>
   </div>
   <ng-template #readonlyMode>

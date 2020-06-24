@@ -1,6 +1,6 @@
 import {
   AfterViewInit,
-  Component,
+  Component, ElementRef,
   EventEmitter,
   Input,
   OnChanges,
@@ -13,7 +13,7 @@ import {ValidatorService} from "../Services/validator.service";
 import {FormatterService} from "../Services/formatter.service";
 import {ConnectorService} from "../Services/Connector.service";
 import {fromEvent, Observable, timer} from "rxjs";
-import {debounce, debounceTime, filter, tap} from "rxjs/operators";
+import {debounce, filter} from "rxjs/operators";
 
 @Component({
   selector: 'app-number-input',
@@ -31,68 +31,52 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() decimalSeparator: string;
   @Input() disabled: boolean;
   @Input() readonly: boolean;
+
   @Input() value;
   @Output() valueChange = new EventEmitter<string>();
 
-  @ViewChild('input') inputElement;
+  @ViewChild('input') inputElement: ElementRef;
 
   inputEvent$: Observable<KeyboardEvent>;
 
 
   constructor(private validator: ValidatorService, private formatter: FormatterService, public model: ConnectorService) {
-
-
   }
 
-
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
 
     for (let key in changes) {
-      if (key === 'milliSeconds' || key === 'readonly' || key === 'disabled') {
-        continue;
-      }
-      if (key === 'value') {
-        this.model.currentValue = (changes[key].currentValue) ? changes[key].currentValue : '';
-        this.validator.validate();
-
-        if (!this.readonly) {
-
-          if (this.model.valid) {
+      if (!(key === 'milliSeconds' || key === 'readonly' || key === 'disabled')) {
+        if (key === 'value' && changes.hasOwnProperty(key)) {
+          this.model.currentValue = (changes[key].currentValue) ? changes[key].currentValue : '';
+          this.validator.validate();
+          if (!this.readonly && this.model.valid) {
             this.formatter.format();
             this.onInputChange();
             this.valueChange.emit(this.model.currentValue);
+          } else {
+            if (this.model.valid) {
+              this.formatter.format();
+            }
           }
-
-        } else {
-          if (this.model.valid) {
-            this.formatter.format();
-          }
+        } else if (changes[key].currentValue) {
+          this.model[key] = changes[key].currentValue
         }
-        continue;
-      }
-      if (changes[key].currentValue) {
-        this.model[key] = changes[key].currentValue
       }
     }
     this.validator.updateRegExp();
     this.onInputChange();
     this.validator.validate();
     this.formatter.format();
-
-
   }
 
   ngOnInit(): void {
-
-    if (this.value) {
-      this.model.currentValue = this.value;
-    }
-
   }
 
   ngAfterViewInit(): void {
-    if (this.readonly)
+    if (this.readonly) {
       return
+    }
 
     this.inputEvent$ = fromEvent<KeyboardEvent>(this.inputElement.nativeElement, 'keydown');
     this.inputEvent$.pipe(
@@ -101,35 +85,29 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
         if (event.key === 'Backspace') {
           this.onInputChange();
           return true;
-        }
-
-        if (!this.validator.validatorExpression.test(event.key)) {
+        } else if (!this.validator.validatorExpression.test(event.key)) {
           event.preventDefault();
           return false;
-        }
-
-        if (!this.validator.validatorExpression.test(event.key)) {
+        } else if (!this.validator.validatorExpression.test(event.key)) {
           event.preventDefault();
         }
         return this.validator.validatorExpression.test(event.key)
       }),
       debounce(() => timer(this.milliSeconds))
-    ).subscribe((event) => {
+    ).subscribe(() => {
       this.validator.validate();
       if (this.model.valid) {
-
         if (!this.readonly) {
           this.onInputChange();
           this.valueChange.emit(this.model.currentValue);
         }
         this.formatter.format();
-
       }
     })
 
   }
 
-  onInputChange() {
+  onInputChange(): void {
     this.model.currentValue = this.model.currentValue.split(this.model.groupSeparator).join("");
   }
 

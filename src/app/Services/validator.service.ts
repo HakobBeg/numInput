@@ -9,26 +9,15 @@ export class ValidatorService {
   validatorExpression: RegExp;
 
   constructor(private connector: ConnectorService) {
-
-    this.validatorExpression = new RegExp(
-      '^' +
-      '[-]?' +
-      '\\d*?' +
-      '\\.?' +
-      '\\d*' +
-      '$'
-    )
-
-
+    this.updateRegExp();
   }
 
-  updateRegExp(){
-
+  updateRegExp(): void {
     this.validatorExpression = new RegExp(
       '^' +
       '[-]?' +
       '\\d*?' +
-      `\\${(this.connector.decimalSeparator)?this.connector.decimalSeparator:'.'}?` +
+      `\\${(this.connector.decimalSeparator) ? this.connector.decimalSeparator : '.'}?` +
       '\\d*' +
       '$'
     )
@@ -66,11 +55,11 @@ export class ValidatorService {
 
 
   validate(): void {
-    if(this.connector.currentValue.length === 0) {
+    if (this.connector.currentValue.length === 0) {
       this.connector.valid = true
       return
     }
-      this.connector.valid = this.symbolValidator() && this.sizeValidator() && this.fractionValidator();
+    this.connector.valid = this.symbolValidator() && this.sizeValidator() && this.fractionValidator();
   }
 
 
