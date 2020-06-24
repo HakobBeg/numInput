@@ -32,8 +32,10 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() disabled: boolean;
   @Input() readonly: boolean;
 
-  @Input() value;
+  @Input() value: string;
   @Output() valueChange = new EventEmitter<string>();
+
+  reservedValue: string;
 
   @ViewChild('input') inputElement: ElementRef;
 
@@ -109,6 +111,16 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
 
   onInputChange(): void {
     this.model.currentValue = this.model.currentValue.split(this.model.groupSeparator).join("");
+  }
+
+  onSessionStart(): void{
+    this.reservedValue = this.model.currentValue;
+  }
+
+  onSessionInvalidEnd(): void{
+    if(!(this.validator.sizeValidator() && this.validator.symbolValidator() && this.validator.fractionValidator())){
+          // this.model.currentValue = this.reservedValue;
+    }
   }
 
 }
