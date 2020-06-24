@@ -55,7 +55,7 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
       if (key === 'value') {
         this.model.currentValue = (changes[key].currentValue) ? changes[key].currentValue : '';
         if(this.inputElement) {
-          this.inputElement.nativeElement.dispatchEvent(new Event('keydown', {bubbles: true}) );
+
         }
         continue;
       }
@@ -87,16 +87,13 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
     this.inputEvent$.pipe(
       filter((event) => {
 
-
-
-
-
         if (event.key === 'Backspace' ) {
           this.onInputChange();
           return true;
         }
 
-        if (!(event.keyCode > 95 && event.keyCode < 106 || event.keyCode > 47 && event.keyCode < 58)) {
+        if (!this.validator.validatorExpression.test(event.key)) {
+          event.preventDefault();
           return false;
         }
 
