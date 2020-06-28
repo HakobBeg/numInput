@@ -3,7 +3,7 @@ import {
   Component, ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
+  OnChanges, OnDestroy,
   OnInit,
   Output,
   SimpleChanges,
@@ -12,8 +12,8 @@ import {
 import {ValidatorService} from "../Services/validator.service";
 import {FormatterService} from "../Services/formatter.service";
 import {ConnectorService} from "../Services/Connector.service";
-import {fromEvent, Observable, timer} from "rxjs";
-import {debounce, filter} from "rxjs/operators";
+import {fromEvent, Observable, ReplaySubject, timer} from "rxjs";
+import {debounce, filter, takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-number-input',
@@ -21,7 +21,7 @@ import {debounce, filter} from "rxjs/operators";
   styleUrls: ['./number-input.component.css'],
   providers: [ConnectorService, FormatterService, ValidatorService]
 })
-export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
+export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges , OnDestroy{
 
   @Input() min: number;
   @Input() max: number;
@@ -41,6 +41,7 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
 
   inputEvent$: Observable<KeyboardEvent>;
 
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private validator: ValidatorService, private formatter: FormatterService, public model: ConnectorService) {
   }
@@ -94,6 +95,7 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
         }
         return this.validator.validatorExpression.test(event.key)
       }),
+      takeUntil(this.destroyed$),
       debounce(() => timer(this.milliSeconds))
     ).subscribe((event) => {
 
@@ -118,9 +120,15 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   onSessionInvalidEnd(): void{
-    if(!(this.validator.sizeValidator(this.model.currentValue) && this.validator.symbolValidator(this.model.currentValue) && this.validator.fractionValidator(this.model.currentValue))){
+    if(!(this.validator.sizeValidator(this.model.currentValue) && this.validator.symbolValidator(this.model.currentValue.split(this.model.groupSeparator).join("")) && this.validator.fractionValidator(this.model.currentValue))){
+      console.log(this.validator.symbolValidator(this.model.currentValue));
           this.model.currentValue = this.lastValue;
     }
+  }
+
+  ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
 }
