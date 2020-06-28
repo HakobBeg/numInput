@@ -24,31 +24,31 @@ export class ValidatorService {
   }
 
 
-  symbolValidator(): boolean {
-    return this.validatorExpression.test(this.connector.currentValue);
+  symbolValidator(expression: string): boolean {
+    return this.validatorExpression.test(expression);
   }
 
-  sizeValidator(): boolean {
+  sizeValidator(expression: string): boolean {
 
     if (this.connector.max) {
       if (this.connector.min) {
-        return this.connector.min < parseFloat(this.connector.currentValue) && parseFloat(this.connector.currentValue) < this.connector.max;
+        return this.connector.min < parseFloat(expression) && parseFloat(expression) < this.connector.max;
       } else {
-        return parseFloat(this.connector.currentValue) < this.connector.max;
+        return parseFloat(expression) < this.connector.max;
       }
     } else {
       if (this.connector.min) {
-        return parseFloat(this.connector.currentValue) > this.connector.min
+        return parseFloat(expression) > this.connector.min
       } else {
         return true;
       }
     }
   }
 
-  fractionValidator(): boolean {
+  fractionValidator(expression: string): boolean {
 
-    if (this.connector.currentValue.indexOf(this.connector.decimalSeparator) >= 0) {
-      return this.connector.currentValue.split(this.connector.decimalSeparator)[1].length <= this.connector.fractionDigits;
+    if (expression.indexOf(this.connector.decimalSeparator) >= 0) {
+      return expression.split(this.connector.decimalSeparator)[1].length <= this.connector.fractionDigits;
     }
     return true;
   }
@@ -59,7 +59,7 @@ export class ValidatorService {
       this.connector.valid = true
       return
     }
-    this.connector.valid = this.symbolValidator() && this.sizeValidator() && this.fractionValidator();
+    this.connector.valid = this.symbolValidator(this.connector.currentValue) && this.sizeValidator(this.connector.currentValue) && this.fractionValidator(this.connector.currentValue);
   }
 
 

@@ -35,7 +35,7 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() value: string;
   @Output() valueChange = new EventEmitter<string>();
 
-  reservedValue: string;
+  lastValue: string;
 
   @ViewChild('input') inputElement: ElementRef;
 
@@ -83,7 +83,6 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
     this.inputEvent$ = fromEvent<KeyboardEvent>(this.inputElement.nativeElement, 'keydown');
     this.inputEvent$.pipe(
       filter((event) => {
-
         if (event.key === 'Backspace') {
           this.onInputChange();
           return true;
@@ -96,7 +95,8 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
         return this.validator.validatorExpression.test(event.key)
       }),
       debounce(() => timer(this.milliSeconds))
-    ).subscribe(() => {
+    ).subscribe((event) => {
+
       this.validator.validate();
       if (this.model.valid) {
         if (!this.readonly) {
@@ -114,12 +114,12 @@ export class NumberInputComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   onSessionStart(): void{
-    this.reservedValue = this.model.currentValue;
+    this.lastValue = this.model.currentValue;
   }
 
   onSessionInvalidEnd(): void{
-    if(!(this.validator.sizeValidator() && this.validator.symbolValidator() && this.validator.fractionValidator())){
-          // this.model.currentValue = this.reservedValue;
+    if(!(this.validator.sizeValidator(this.model.currentValue) && this.validator.symbolValidator(this.model.currentValue) && this.validator.fractionValidator(this.model.currentValue))){
+          this.model.currentValue = this.lastValue;
     }
   }
 
